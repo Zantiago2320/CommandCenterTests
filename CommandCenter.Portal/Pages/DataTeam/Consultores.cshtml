@@ -1,0 +1,85 @@
+@page
+@model CommandCenter.Portal.Pages.DataTeam.ConsultoresModel
+@{
+    ViewData["Title"] = "Consultores";
+}
+
+@section Styles {
+    <style>
+        .avatar-circle {
+            width: 38px; height: 38px; border-radius: 50%;
+            object-fit: cover; background: #6366f1;
+            display: inline-flex; align-items: center; justify-content: center;
+            color: #fff; font-weight: 700; font-size: .85rem;
+        }
+    </style>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">Consultores</h2>
+    <span class="badge bg-primary fs-6">@Model.Consultores.Count registros</span>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Error))
+{
+    <div class="alert alert-danger">@Model.Error</div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th></th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Cargo</th>
+                        <th>Tecnología</th>
+                        <th>Seniority</th>
+                        <th>Célula</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in Model.Consultores)
+                    {
+                        <tr>
+                            <td>
+                                @if (!string.IsNullOrEmpty(c.FotoUrl))
+                                {
+                                    <img src="@c.FotoUrl" alt="@c.NombreCompleto" class="avatar-circle" />
+                                }
+                                else
+                                {
+                                    <span class="avatar-circle">@c.Nombre[0]@c.Apellido[0]</span>
+                                }
+                            </td>
+                            <td class="fw-semibold">@c.NombreCompleto</td>
+                            <td class="text-muted small">@c.Email</td>
+                            <td>@(c.Cargo ?? "—")</td>
+                            <td>@(c.Tecnologia ?? "—")</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(c.NivelSeniority))
+                                {
+                                    <span class="badge bg-secondary">@c.NivelSeniority</span>
+                                }
+                            </td>
+                            <td>@(c.CelulaNombre ?? "—")</td>
+                            <td>
+                                @if (c.Habilitado)
+                                {
+                                    <span class="badge bg-success">Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Inactivo</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
