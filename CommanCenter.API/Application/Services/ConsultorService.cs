@@ -173,7 +173,7 @@ public class ConsultorService : IConsultorService
         return ApiResponse<ConsultorDto>.Ok(MapToDto(consultor), "Consultor actualizado exitosamente.");
     }
 
-    public async Task<ApiResponse<bool>> DeshabilitarAsync(int id, string motivo, string usuarioId)
+    public async Task<ApiResponse<bool>> DeshabilitarAsync(int id, string? razon, string usuarioId)
     {
         var consultor = await _repo.GetByIdAsync(id);
         if (consultor is null)
@@ -183,7 +183,7 @@ public class ConsultorService : IConsultorService
             return ApiResponse<bool>.Fail("El consultor ya se encuentra deshabilitado.");
 
         consultor.Habilitado = false;
-        consultor.MotivoDeshabilitacion = motivo.Trim();
+        consultor.MotivoDeshabilitacion = razon?.Trim();
         consultor.FechaDeshabilitacion = DateTime.UtcNow;
         consultor.FechaModificacion = DateTime.UtcNow;
         consultor.ModificadoPor = usuarioId;
@@ -193,15 +193,15 @@ public class ConsultorService : IConsultorService
 
         await _auditoria.RegistrarAsync("DataTeam", "DISABLE", "Consultor",
             id.ToString(), "Habilitado=true",
-            $"Habilitado=false | Motivo: {motivo.Trim()}", usuarioId, null, null);
+            $"Habilitado=false | Motivo: {razon?.Trim() ?? "N/A"}", usuarioId, null, null);
 
         _logger.LogWarning("Consultor {Id} deshabilitado por {Usuario}. Motivo: {Motivo}",
-            id, usuarioId, motivo.Trim());
+            id, usuarioId, razon?.Trim() ?? "No especificado");
 
         return ApiResponse<bool>.Ok(true, "Consultor deshabilitado.");
     }
 
-    public async Task<ApiResponse<bool>> RehabilitarAsync(int id, string usuarioId)
+    public async Task<ApiResponse<bool>> RehabilitarAsync(int id, string? razon, string usuarioId)
     {
         var consultor = await _repo.GetByIdAsync(id);
         if (consultor is null)

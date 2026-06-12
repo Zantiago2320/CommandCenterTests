@@ -81,4 +81,57 @@ public class AuditoriaRepository : Repository<AuditoriaLog>, IAuditoriaRepositor
         await _context.AuditoriaLogs.AddAsync(log);
         await _context.SaveChangesAsync();
     }
+
+    public async Task RegistrarCambioAsync(
+        string modulo,
+        string accion,
+        string entidad,
+        string? entidadId,
+        string? usuarioId,
+        string? usuarioEmail,
+        string? usuarioRol,
+        string? campoModificado = null,
+        string? valorAnterior = null,
+        string? valorNuevo = null,
+        string? razon = null
+    )
+    {
+        var http = _httpContextAccessor.HttpContext;
+        var usuario = http?.User;
+
+        usuarioId ??= usuario?.FindFirstValue(ClaimTypes.Name)
+            ?? usuario?.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? "system";
+
+        usuarioEmail ??= usuario?.FindFirstValue(ClaimTypes.Email)
+            ?? usuario?.FindFirstValue("email")
+            ?? usuarioId;
+
+        usuarioRol ??= usuario?.FindFirstValue(ClaimTypes.Role);
+
+        var ip = http?.Connection?.RemoteIpAddress?.ToString();
+        var userAgent = http?.Request?.Headers["User-Agent"].ToString();
+
+        var log = new AuditoriaLog
+        {
+            Modulo = modulo,
+            Accion = accion,
+            Entidad = entidad,
+            EntidadId = entidadId,
+            UsuarioId = usuarioId,
+            UsuarioEmail = usuarioEmail,
+            UsuarioRol = usuarioRol,
+            CampoModificado = campoModificado,
+            ValorAnterior = valorAnterior,
+            ValorNuevo = valorNuevo,
+            Razon = razon,
+            IpAddress = string.IsNullOrWhiteSpace(ip) ? "desconocida" : ip,
+            UserAgent = string.IsNullOrWhiteSpace(userAgent) ? "desconocido" : userAgent,
+            Exitoso = true,
+            FechaCreacion = DateTime.UtcNow
+        };
+
+        await _context.AuditoriaLogs.AddAsync(log);
+        await _context.SaveChangesAsync();
+    }
 }

@@ -46,7 +46,7 @@ public class NotificationsController : ControllerBase
     /// enviará, los destinatarios configurados y los datos que irán en el Excel adjunto.
     /// </summary>
     [HttpGet("cumpleanios-mes/preview")]
-    [Authorize(Roles = "Admin,Senior")]
+    [Authorize(Roles = "Admin,Supervisor")]
     public async Task<IActionResult> PreviewCumpleaniosDelMes()
     {
         var nombreMes = DateTime.UtcNow.ToString("MMMM");
@@ -78,7 +78,7 @@ public class NotificationsController : ControllerBase
     /// configurados y datos que irán en el Excel adjunto.
     /// </summary>
     [HttpGet("reporte-mensual/preview")]
-    [Authorize(Roles = "Admin,Senior")]
+    [Authorize(Roles = "Admin,Supervisor")]
     public async Task<IActionResult> PreviewReporteMensual()
     {
         var periodo = DateTime.UtcNow.ToString("MMMM yyyy");
@@ -123,7 +123,7 @@ public class NotificationsController : ControllerBase
     /// El (los) destinatario(s) se define(n) en el campo "To" del cuerpo de la petición.
     /// </summary>
     [HttpPost("email")]
-    [Authorize(Roles = "Admin,Senior")]
+    [Authorize(Roles = "Admin,Supervisor")]
     public async Task<IActionResult> EnviarEmail([FromBody] SendEmailRequest request)
     {
         if (!ModelState.IsValid)
@@ -205,7 +205,7 @@ public class NotificationsController : ControllerBase
     /// a los destinatarios configurados en appsettings (Notificaciones).
     /// </summary>
     [HttpPost("cumpleanios-mes")]
-    [Authorize(Roles = "Admin,Senior")]
+    [Authorize(Roles = "Admin,Supervisor")]
     public async Task<IActionResult> EnviarCumpleaniosDelMes()
     {
         var usuarioId = User.FindFirstValue(ClaimTypes.Name) ?? "system";
@@ -219,7 +219,7 @@ public class NotificationsController : ControllerBase
     /// a los destinatarios configurados en appsettings (Notificaciones).
     /// </summary>
     [HttpPost("reporte-mensual")]
-    [Authorize(Roles = "Admin,Senior")]
+    [Authorize(Roles = "Admin,Supervisor")]
     public async Task<IActionResult> EnviarReporteMensual()
     {
         var usuarioId = User.FindFirstValue(ClaimTypes.Name) ?? "system";

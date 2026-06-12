@@ -6,7 +6,7 @@ using CommanCenter.Portal.Services;
 
 namespace CommanCenter.Portal.Pages.Admin;
 
-[Authorize(Roles = "Admin,Senior")]
+[Authorize(Roles = "Admin,Supervisor")]
 public class CorreosModel : PageModel
 {
     private readonly IApiClient _api;

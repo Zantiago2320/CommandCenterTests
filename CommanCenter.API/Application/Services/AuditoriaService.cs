@@ -40,20 +40,51 @@ public class AuditoriaService : IAuditoriaService
         return ApiResponse<IEnumerable<AuditoriaLogDto>>.Ok(logs.Select(MapToDto));
     }
 
+    /// <summary>Registra un cambio en la auditoría</summary>
+    public async Task RegistrarCambioAsync(
+        string modulo,
+        string accion,
+        string entidad,
+        string? entidadId,
+        string? usuarioId,
+        string? usuarioEmail,
+        string? usuarioRol,
+        string? campoModificado = null,
+        string? valorAnterior = null,
+        string? valorNuevo = null,
+        string? razon = null
+    )
+    {
+        try
+        {
+            await _repo.RegistrarCambioAsync(
+                modulo, accion, entidad, entidadId, usuarioId, usuarioEmail, usuarioRol,
+                campoModificado, valorAnterior, valorNuevo, razon
+            );
+        }
+        catch
+        {
+            // No lanzar excepción - la auditoría no debe fallar la operación principal
+        }
+    }
+
     private static AuditoriaLogDto MapToDto(AuditoriaLog a) => new()
     {
         Id = a.Id,
         Fecha = a.FechaCreacion,
         Usuario = a.UsuarioId,
         UsuarioEmail = a.UsuarioEmail,
+        UsuarioRol = a.UsuarioRol,
         IpAddress = a.IpAddress,
         UserAgent = a.UserAgent,
         Modulo = a.Modulo,
         Accion = a.Accion,
         Entidad = a.Entidad,
         EntidadId = a.EntidadId,
+        CampoModificado = a.CampoModificado,
         ValorAnterior = a.ValorAnterior,
         ValorNuevo = a.ValorNuevo,
+        Razon = a.Razon,
         Exitoso = a.Exitoso,
         Error = a.MensajeError
     };

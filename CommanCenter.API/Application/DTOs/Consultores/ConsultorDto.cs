@@ -120,7 +120,13 @@ public class ActualizarConsultorDto : CrearConsultorDto
 /// <summary>Datos para deshabilitar un consultor indicando el motivo.</summary>
 public class DeshabilitarConsultorDto
 {
-    [Required(ErrorMessage = "El motivo de deshabilitación es obligatorio.")]
     [MaxLength(500)]
-    public string Motivo { get; set; } = string.Empty;
+    public string? Razon { get; set; } // Razón de la deshabilitación
+}
+
+/// <summary>Datos para rehabilitar un consultor.</summary>
+public class RehabilitarConsultorDto
+{
+    [MaxLength(500)]
+    public string? Razon { get; set; } // Razón de la reactivación
 }

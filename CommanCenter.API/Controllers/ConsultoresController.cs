@@ -58,7 +58,7 @@ public class ConsultoresController : ControllerBase
 
     /// <summary>Crea un nuevo consultor.</summary>
     [HttpPost]
-    [Authorize(Roles = "Admin,Supervisor")]
+    [Authorize(Roles = "Admin,Supervisor,Senior")]
     public async Task<IActionResult> Crear([FromBody] CrearConsultorDto dto)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name) ?? "system";
@@ -68,7 +68,7 @@ public class ConsultoresController : ControllerBase
 
     /// <summary>Actualiza un consultor existente.</summary>
     [HttpPut("{id:int}")]
-    [Authorize(Roles = "Admin,Supervisor")]
+    [Authorize(Roles = "Admin,Supervisor,Senior")]
     public async Task<IActionResult> Actualizar(int id, [FromBody] ActualizarConsultorDto dto)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name) ?? "system";
@@ -78,22 +78,23 @@ public class ConsultoresController : ControllerBase
 
     /// <summary>Deshabilita un consultor (soft disable) indicando el motivo.</summary>
     [HttpPatch("{id:int}/deshabilitar")]
-    [Authorize(Roles = "Admin,Supervisor")]
+    [Authorize(Roles = "Admin,Supervisor,Senior")]
     public async Task<IActionResult> Deshabilitar(int id, [FromBody] DeshabilitarConsultorDto dto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
         var userId = User.FindFirstValue(ClaimTypes.Name) ?? "system";
-        var result = await _service.DeshabilitarAsync(id, dto.Motivo, userId);
+        var result = await _service.DeshabilitarAsync(id, dto.Razon, userId);
         return result.Exitoso ? Ok(result) : NotFound(result);
     }
 
     /// <summary>Rehabilita un consultor previamente deshabilitado.</summary>
     [HttpPatch("{id:int}/rehabilitar")]
-    [Authorize(Roles = "Admin,Supervisor")]
-    public async Task<IActionResult> Rehabilitar(int id)
+    [Authorize(Roles = "Admin,Supervisor,Senior")]
+    public async Task<IActionResult> Rehabilitar(int id, [FromBody] RehabilitarConsultorDto dto)
     {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
         var userId = User.FindFirstValue(ClaimTypes.Name) ?? "system";
-        var result = await _service.RehabilitarAsync(id, userId);
+        var result = await _service.RehabilitarAsync(id, dto.Razon, userId);
         return result.Exitoso ? Ok(result) : NotFound(result);
     }
 
