@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="CommanCenter.API/CommanCenter.API.csproj" />
+  <Project Path="CommanCenter.Portal/CommanCenter.Portal.csproj" />
+</Solution>

@@ -3,6 +3,7 @@
     "CommanCenter.Portal": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "Auth/Login",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
