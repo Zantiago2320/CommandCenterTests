@@ -1,11 +1,20 @@
 ﻿# CommanCenter.SQL
 
-Repositorio de scripts T-SQL puros para la base de datos del Command Center.
+Proyecto SQL para centralizar los objetos de base de datos del Command Center.
+
+- `CommanCenter.SQL.sqlproj` compila el esquema declarativo en `Schema/`.
+- `Tables/`, `Views/`, `StoredProcedures/` y `Seeds/` se conservan como scripts idempotentes/manuales.
 
 ## Estructura
 
 ```
 CommanCenter.SQL/
+├── CommanCenter.SQL.sqlproj     ← SQL project compilable
+├── Schema/                      ← Definición declarativa de objetos BD
+│   ├── Tables/
+│   ├── Indexes/
+│   ├── Views/
+│   └── StoredProcedures/
 ├── Tables/                     ← CREATE TABLE scripts
 │   ├── 01_Consultores.sql
 │   ├── 02_Celulas.sql
@@ -39,9 +48,18 @@ CommanCenter.SQL/
 -- Seeds/01_Seeds.sql
 ```
 
+## Compilación del proyecto SQL
+
+```powershell
+dotnet build .\CommanCenter.SQL\CommanCenter.SQL.sqlproj
+```
+
+Los cambios estructurales de BD deben agregarse primero en `Schema/` para mantener el `.sqlproj` como fuente estándar. Si se requiere ejecución manual/idempotente, replicar el cambio en los scripts legacy correspondientes.
+
 ## Reglas
 
 - ❌ Nunca colocar código C# aquí
 - ❌ Nunca colocar HTML aquí
 - ✅ Solo T-SQL puro
-- ✅ Todos los scripts deben ser idempotentes (IF NOT EXISTS)
+- ✅ Los objetos de `Schema/` deben ser declarativos (`CREATE TABLE`, `CREATE VIEW`, `CREATE PROCEDURE`, índices, etc.)
+- ✅ Los scripts manuales/legacy deben ser idempotentes (`IF NOT EXISTS`)

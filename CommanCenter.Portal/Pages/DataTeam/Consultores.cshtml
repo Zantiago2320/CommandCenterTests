@@ -83,8 +83,7 @@
                         <th>Nombre</th>
                         <th>Email</th>
                         <th>Cargo</th>
-                        <th>Tecnología</th>
-                        <th>Seniority</th>
+                        <th>Rol</th>
                         <th>Células</th>
                         <th>Estado</th>
                         <th>Creado</th>
@@ -108,13 +107,7 @@
                             <td class="fw-semibold">@c.NombreCompleto</td>
                             <td class="text-muted small">@c.Email</td>
                             <td>@(c.Cargo ?? "—")</td>
-                            <td>@(c.Tecnologia ?? "—")</td>
-                            <td>
-                                @if (!string.IsNullOrEmpty(c.NivelSeniority))
-                                {
-                                    <span class="badge bg-secondary">@c.NivelSeniority</span>
-                                }
-                            </td>
+                            <td>@(c.Rol ?? "—")</td>
                             <td>
                                 @if (c.Celulas.Count > 0)
                                 {

@@ -44,7 +44,7 @@ public class ConsultoresModel : PageModel
         var token = HttpContext.Session.GetString("jwt_token");
         var result = await _api.PatchAsync<bool>(
             $"api/consultores/{id}/deshabilitar",
-            new { Motivo = motivo },
+            new { Razon = motivo },
             token);
 
         if (result?.Exitoso == true)

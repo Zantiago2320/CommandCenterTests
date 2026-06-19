@@ -46,10 +46,6 @@
                     <input asp-for="Input.Celular" class="form-control" required maxlength="20" />
                     <span asp-validation-for="Input.Celular" class="text-danger small"></span>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label">Teléfono</label>
-                    <input asp-for="Input.Telefono" class="form-control" maxlength="20" />
-                </div>
                 <div class="col-md-6">
                     <label class="form-label">Cargo <span class="text-danger">*</span></label>
                     <input asp-for="Input.Cargo" class="form-control" required maxlength="150" />
@@ -65,23 +61,8 @@
                     <input asp-for="Input.Rol" class="form-control" maxlength="100" />
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Tecnología</label>
-                    <input asp-for="Input.Tecnologia" class="form-control" maxlength="100" />
-                </div>
-                <div class="col-md-4">
                     <label class="form-label">Capacidad</label>
                     <input asp-for="Input.Capacidad" class="form-control" maxlength="50" />
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Seniority</label>
-                    <select asp-for="Input.NivelSeniority" class="form-select">
-                        <option value="">— Seleccionar —</option>
-                        <option value="Trainee">Trainee</option>
-                        <option value="Junior">Junior</option>
-                        <option value="Semi Senior">Semi Senior</option>
-                        <option value="Senior">Senior</option>
-                        <option value="Lead">Lead</option>
-                    </select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Estado <span class="text-danger">*</span></label>

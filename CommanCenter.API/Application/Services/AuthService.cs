@@ -34,51 +34,81 @@ public class AuthService : IAuthService
 
     public async Task<ApiResponse<TokenResponseDto>> LoginAsync(LoginDto dto, string? ip)
     {
-        var user = await _userManager.FindByNameAsync(dto.Usuario);
-        if (user is null || !await _userManager.CheckPasswordAsync(user, dto.Password))
+        try
         {
-            await _auditoria.RegistrarAsync("Auth", "LOGIN_FAIL", "Usuario",
-                null, null, dto.Usuario, null, dto.Usuario, ip, exitoso: false, error: "Credenciales inválidas");
-            return ApiResponse<TokenResponseDto>.Fail("Credenciales inválidas.");
+            var user = await _userManager.FindByNameAsync(dto.Usuario);
+            if (user is null || !await _userManager.CheckPasswordAsync(user, dto.Password))
+            {
+                try
+                {
+                    await _auditoria.RegistrarAsync("Auth", "LOGIN_FAIL", "Usuario",
+                        null, null, dto.Usuario, null, dto.Usuario, ip, exitoso: false, error: "Credenciales inválidas");
+                }
+                catch (Exception exAudit)
+                {
+                    _logger.LogWarning(exAudit, "No se pudo registrar auditoría de login fallido");
+                }
+                return ApiResponse<TokenResponseDto>.Fail("Credenciales inválidas.");
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = GenerarJwt(user, roles);
+            var refreshToken = GenerarRefreshToken();
+
+            try
+            {
+                await _auditoria.RegistrarAsync("Auth", "LOGIN", "Usuario",
+                    user.Id, null, user.UserName, user.Id, user.UserName, ip);
+            }
+            catch (Exception exAudit)
+            {
+                _logger.LogWarning(exAudit, "No se pudo registrar auditoría de login exitoso para {Usuario}", user.UserName);
+            }
+
+            _logger.LogInformation("Login exitoso: {Usuario} desde IP {Ip}", user.UserName, ip);
+
+            return ApiResponse<TokenResponseDto>.Ok(new TokenResponseDto
+            {
+                AccessToken = token.Token,
+                RefreshToken = refreshToken,
+                Expiracion = token.Expiracion,
+                Email = user.Email ?? string.Empty,
+                NombreCompleto = user.UserName ?? string.Empty,
+                Roles = roles.ToList()
+            });
         }
-
-        var roles = await _userManager.GetRolesAsync(user);
-        var token = GenerarJwt(user, roles);
-        var refreshToken = GenerarRefreshToken();
-
-        await _auditoria.RegistrarAsync("Auth", "LOGIN", "Usuario",
-            user.Id, null, user.UserName, user.Id, user.UserName, ip);
-
-        _logger.LogInformation("Login exitoso: {Usuario} desde IP {Ip}", user.UserName, ip);
-
-        return ApiResponse<TokenResponseDto>.Ok(new TokenResponseDto
+        catch (Exception ex)
         {
-            AccessToken = token.Token,
-            RefreshToken = refreshToken,
-            Expiracion = token.Expiracion,
-            Email = user.Email ?? string.Empty,
-            NombreCompleto = user.UserName ?? string.Empty,
-            Roles = roles.ToList()
-        });
+            _logger.LogError(ex, "Error inesperado en LoginAsync para {Usuario}", dto.Usuario);
+            return ApiResponse<TokenResponseDto>.Fail("Error al procesar el inicio de sesión.");
+        }
     }
 
     public Task<ApiResponse<TokenResponseDto>> RefreshTokenAsync(string refreshToken)
     {
-        // Implementación básica — en producción validar contra DB
         return Task.FromResult(ApiResponse<TokenResponseDto>.Fail("RefreshToken no implementado aún."));
     }
 
     public async Task<ApiResponse<bool>> LogoutAsync(string usuarioId)
     {
-        await _auditoria.RegistrarAsync("Auth", "LOGOUT", "Usuario",
-            usuarioId, null, null, usuarioId, null, null);
+        try
+        {
+            await _auditoria.RegistrarAsync("Auth", "LOGOUT", "Usuario",
+                usuarioId, null, null, usuarioId, null, null);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "No se pudo registrar auditoría de logout para {UsuarioId}", usuarioId);
+        }
         return ApiResponse<bool>.Ok(true);
     }
 
     private (string Token, DateTime Expiracion) GenerarJwt(IdentityUser user, IList<string> roles)
     {
         var jwtSettings = _config.GetSection("JwtSettings");
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!));
+        var secretKey = jwtSettings["SecretKey"]
+            ?? throw new InvalidOperationException("JwtSettings:SecretKey no está configurado. Verifique las variables de entorno o appsettings.");
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         var expiracion = DateTime.UtcNow.AddMinutes(int.Parse(jwtSettings["ExpirationMinutes"] ?? "480"));
 
         var claims = new List<Claim>

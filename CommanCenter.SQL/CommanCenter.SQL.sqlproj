@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.Build.Sql/2.2.0">
+
+  <PropertyGroup>
+	<Name>CommanCenter.SQL</Name>
+	<DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
+	<ModelCollation>1033, CI</ModelCollation>
+	<ProjectGuid>{ddf0470d-aa38-8d66-73de-bd0ae5fbda34}</ProjectGuid>
+	<TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+
+  <!-- Excluir todo el glob automático y declarar cada objeto explícitamente
+	   para que Visual Studio muestre la estructura correcta en el explorador. -->
+  <ItemGroup>
+	<Build Remove="**\*.sql" />
+  </ItemGroup>
+
+  <!-- ═══════════════ TABLAS ═══════════════ -->
+  <ItemGroup>
+	<Build Include="Tables\Consultores.sql" />
+	<Build Include="Tables\Celulas.sql" />
+	<Build Include="Tables\CelulaMiembros.sql" />
+	<Build Include="Tables\CelulaLideres.sql" />
+	<Build Include="Tables\AuditoriaLogs.sql" />
+	<Build Include="Tables\Notificaciones.sql" />
+  </ItemGroup>
+
+  <!-- ═══════════════ VISTAS ═══════════════ -->
+  <ItemGroup>
+	<Build Include="Views\VW_ConsultoresActivos.sql" />
+	<Build Include="Views\VW_OrganigramaResumen.sql" />
+  </ItemGroup>
+
+  <!-- ═══════════════ STORED PROCEDURES ═══════════════ -->
+  <ItemGroup>
+	<Build Include="StoredProcedures\SP_GetAuditoria.sql" />
+	<Build Include="StoredProcedures\SP_GetOrganigramaCompleto.sql" />
+  </ItemGroup>
+
+  <!-- ═══════════════ SEEDS (solo contenido, no compilado) ═══════════════ -->
+  <ItemGroup>
+	<None Include="Seeds\01_Seeds.sql" />
+  </ItemGroup>
+
+  <!-- Carpetas visibles en el explorador de soluciones -->
+  <ItemGroup>
+	<Folder Include="Tables\" />
+	<Folder Include="Views\" />
+	<Folder Include="StoredProcedures\" />
+	<Folder Include="Seeds\" />
+  </ItemGroup>
+
+</Project>

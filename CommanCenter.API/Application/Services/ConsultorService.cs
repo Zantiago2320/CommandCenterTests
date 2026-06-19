@@ -64,7 +64,7 @@ public class ConsultorService : IConsultorService
 
     public async Task<ApiResponse<ConsultorDto>> GetByIdAsync(int id)
     {
-        var consultor = await _repo.GetByIdAsync(id);
+        var consultor = await _repo.GetByIdWithCelulasAsync(id);
         if (consultor is null)
             return ApiResponse<ConsultorDto>.NotFound("Consultor");
 
@@ -85,12 +85,9 @@ public class ConsultorService : IConsultorService
                 Nombre = dto.Nombre.Trim(),
                 Apellido = dto.Apellido.Trim(),
                 Email = dto.Email.Trim().ToLower(),
-                Telefono = dto.Telefono,
                 Celular = dto.Celular,
                 Cargo = dto.Cargo,
                 Rol = dto.Rol,
-                Tecnologia = dto.Tecnologia,
-                NivelSeniority = dto.NivelSeniority,
                 Capacidad = dto.Capacidad,
                 Empresa = dto.Empresa,
                 Direccion = dto.Direccion,
@@ -132,7 +129,7 @@ public class ConsultorService : IConsultorService
 
     public async Task<ApiResponse<ConsultorDto>> ActualizarAsync(int id, ActualizarConsultorDto dto, string usuarioId)
     {
-        var consultor = await _repo.GetByIdAsync(id);
+        var consultor = await _repo.GetByIdWithCelulasAsync(id);
         if (consultor is null)
             return ApiResponse<ConsultorDto>.NotFound("Consultor");
 
@@ -142,12 +139,9 @@ public class ConsultorService : IConsultorService
         consultor.Nombre = dto.Nombre.Trim();
         consultor.Apellido = dto.Apellido.Trim();
         consultor.Email = dto.Email.Trim().ToLower();
-        consultor.Telefono = dto.Telefono;
         consultor.Celular = dto.Celular;
         consultor.Cargo = dto.Cargo;
         consultor.Rol = dto.Rol;
-        consultor.Tecnologia = dto.Tecnologia;
-        consultor.NivelSeniority = dto.NivelSeniority;
         consultor.Capacidad = dto.Capacidad;
         consultor.Empresa = dto.Empresa;
         consultor.Direccion = dto.Direccion;
@@ -164,6 +158,16 @@ public class ConsultorService : IConsultorService
         consultor.FechaModificacion = DateTime.UtcNow;
         consultor.ModificadoPor = usuarioId;
 
+        // Sincronizar células: eliminar las que ya no están en el DTO y agregar las nuevas.
+        var celulaIdsNuevas = dto.CelulasIds.Distinct().ToList();
+        var celulaIdsActuales = consultor.Celulas.Select(cm => cm.CelulaId).ToList();
+
+        foreach (var cm in consultor.Celulas.Where(cm => !celulaIdsNuevas.Contains(cm.CelulaId)).ToList())
+            consultor.Celulas.Remove(cm);
+
+        foreach (var celulaId in celulaIdsNuevas.Where(cid => !celulaIdsActuales.Contains(cid)))
+            consultor.Celulas.Add(new Domain.Entities.CelulaMiembro { CelulaId = celulaId });
+
         await _repo.UpdateAsync(consultor);
         await _repo.SaveChangesAsync();
 
@@ -175,7 +179,7 @@ public class ConsultorService : IConsultorService
 
     public async Task<ApiResponse<bool>> DeshabilitarAsync(int id, string? razon, string usuarioId)
     {
-        var consultor = await _repo.GetByIdAsync(id);
+        var consultor = await _repo.GetByIdWithCelulasAsync(id);
         if (consultor is null)
             return ApiResponse<bool>.NotFound("Consultor");
 
@@ -203,7 +207,7 @@ public class ConsultorService : IConsultorService
 
     public async Task<ApiResponse<bool>> RehabilitarAsync(int id, string? razon, string usuarioId)
     {
-        var consultor = await _repo.GetByIdAsync(id);
+        var consultor = await _repo.GetByIdWithCelulasAsync(id);
         if (consultor is null)
             return ApiResponse<bool>.NotFound("Consultor");
 
@@ -231,7 +235,7 @@ public class ConsultorService : IConsultorService
 
     public async Task<ApiResponse<bool>> EliminarAsync(int id, string usuarioId)
     {
-        var consultor = await _repo.GetByIdAsync(id);
+        var consultor = await _repo.GetByIdWithCelulasAsync(id);
         if (consultor is null)
             return ApiResponse<bool>.NotFound("Consultor");
 
@@ -261,12 +265,9 @@ public class ConsultorService : IConsultorService
         Nombre = c.Nombre,
         Apellido = c.Apellido,
         Email = c.Email,
-        Telefono = c.Telefono,
         Celular = c.Celular,
         Cargo = c.Cargo,
         Rol = c.Rol,
-        Tecnologia = c.Tecnologia,
-        NivelSeniority = c.NivelSeniority,
         Capacidad = c.Capacidad,
         Empresa = c.Empresa,
         Direccion = c.Direccion,

@@ -32,12 +32,9 @@ public class AppDbContext : IdentityDbContext
             e.Property(x => x.Apellido).HasMaxLength(100).IsRequired();
             e.Property(x => x.Email).HasMaxLength(200).IsRequired();
             e.HasIndex(x => x.Email).IsUnique();
-            e.Property(x => x.Telefono).HasMaxLength(20);
             e.Property(x => x.Celular).HasMaxLength(20);
             e.Property(x => x.Cargo).HasMaxLength(150);
             e.Property(x => x.Rol).HasMaxLength(100);
-            e.Property(x => x.Tecnologia).HasMaxLength(100);
-            e.Property(x => x.NivelSeniority).HasMaxLength(50);
             e.Property(x => x.Capacidad).HasMaxLength(50);
             e.Property(x => x.Empresa).HasMaxLength(150);
             e.Property(x => x.Direccion).HasMaxLength(250);
@@ -96,8 +93,13 @@ public class AppDbContext : IdentityDbContext
         {
             e.ToTable("Notificaciones");
             e.HasKey(x => x.Id);
+            e.Property(x => x.Modulo).HasMaxLength(100).IsRequired();
+            e.Property(x => x.Tipo).HasMaxLength(50).IsRequired();
             e.Property(x => x.Destinatario).HasMaxLength(200).IsRequired();
             e.Property(x => x.Asunto).HasMaxLength(300).IsRequired();
+            e.Property(x => x.Cuerpo).IsRequired();
+            e.Property(x => x.ErrorMensaje).HasMaxLength(500);
+            e.Property(x => x.AdjuntoUrl).HasMaxLength(500);
             e.HasIndex(x => x.Enviado);
             e.HasIndex(x => x.FechaProgramada);
         });

@@ -47,8 +47,9 @@ public class CelulaService : ICelulaService
         var creada = await _repo.AddAsync(celula);
         await _repo.SaveChangesAsync();
 
-        await _auditoria.RegistrarAsync("DataTeam", "CREATE", "Celula",
-            creada.Id.ToString(), null, creada.Nombre, usuarioId, null, null);
+        try { await _auditoria.RegistrarAsync("DataTeam", "CREATE", "Celula",
+            creada.Id.ToString(), null, creada.Nombre, usuarioId, null, null); }
+        catch (Exception ex) { _logger.LogWarning(ex, "No se pudo registrar auditoría de creación de célula"); }
 
         return ApiResponse<CelulaDto>.Ok(MapToDto(creada), "Célula creada exitosamente.");
     }
@@ -68,8 +69,9 @@ public class CelulaService : ICelulaService
         await _repo.UpdateAsync(celula);
         await _repo.SaveChangesAsync();
 
-        await _auditoria.RegistrarAsync("DataTeam", "UPDATE", "Celula",
-            id.ToString(), null, celula.Nombre, usuarioId, null, null);
+        try { await _auditoria.RegistrarAsync("DataTeam", "UPDATE", "Celula",
+            id.ToString(), null, celula.Nombre, usuarioId, null, null); }
+        catch (Exception ex) { _logger.LogWarning(ex, "No se pudo registrar auditoría de actualización de célula"); }
 
         return ApiResponse<CelulaDto>.Ok(MapToDto(celula), "Célula actualizada.");
     }
@@ -100,8 +102,9 @@ public class CelulaService : ICelulaService
         await _repo.UpdateAsync(celula);
         await _repo.SaveChangesAsync();
 
-        await _auditoria.RegistrarAsync("DataTeam", "DELETE", "Celula",
-            id.ToString(), celula.Nombre, $"Eliminada por {usuarioId}", usuarioId, null, null);
+        try { await _auditoria.RegistrarAsync("DataTeam", "DELETE", "Celula",
+            id.ToString(), celula.Nombre, $"Eliminada por {usuarioId}", usuarioId, null, null); }
+        catch (Exception ex) { _logger.LogWarning(ex, "No se pudo registrar auditoría de eliminación de célula"); }
 
         _logger.LogInformation("Célula {CelulaId} '{NombreCelula}' eliminada por {Usuario}",
             id, celula.Nombre, usuarioId);
@@ -120,8 +123,9 @@ public class CelulaService : ICelulaService
         celula.Miembros.Add(new CelulaMiembro { CelulaId = celulaId, ConsultorId = consultorId });
         await _repo.SaveChangesAsync();
 
-        await _auditoria.RegistrarAsync("DataTeam", "ASSIGN_MEMBER", "Celula",
-            celulaId.ToString(), null, $"ConsultorId={consultorId}", usuarioId, null, null);
+        try { await _auditoria.RegistrarAsync("DataTeam", "ASSIGN_MEMBER", "Celula",
+            celulaId.ToString(), null, $"ConsultorId={consultorId}", usuarioId, null, null); }
+        catch (Exception ex) { _logger.LogWarning(ex, "No se pudo registrar auditoría AsignarMiembro"); }
 
         return ApiResponse<bool>.Ok(true, "Miembro asignado.");
     }
@@ -137,8 +141,9 @@ public class CelulaService : ICelulaService
         celula.Miembros.Remove(miembro);
         await _repo.SaveChangesAsync();
 
-        await _auditoria.RegistrarAsync("DataTeam", "REMOVE_MEMBER", "Celula",
-            celulaId.ToString(), $"ConsultorId={consultorId}", null, usuarioId, null, null);
+        try { await _auditoria.RegistrarAsync("DataTeam", "REMOVE_MEMBER", "Celula",
+            celulaId.ToString(), $"ConsultorId={consultorId}", null, usuarioId, null, null); }
+        catch (Exception ex) { _logger.LogWarning(ex, "No se pudo registrar auditoría RemoverMiembro"); }
 
         return ApiResponse<bool>.Ok(true, "Miembro removido.");
     }
@@ -154,8 +159,9 @@ public class CelulaService : ICelulaService
         celula.Lideres.Add(new CelulaLider { CelulaId = celulaId, ConsultorId = consultorId });
         await _repo.SaveChangesAsync();
 
-        await _auditoria.RegistrarAsync("DataTeam", "ASSIGN_LEADER", "Celula",
-            celulaId.ToString(), null, $"ConsultorId={consultorId}", usuarioId, null, null);
+        try { await _auditoria.RegistrarAsync("DataTeam", "ASSIGN_LEADER", "Celula",
+            celulaId.ToString(), null, $"ConsultorId={consultorId}", usuarioId, null, null); }
+        catch (Exception ex) { _logger.LogWarning(ex, "No se pudo registrar auditoría AsignarLider"); }
 
         return ApiResponse<bool>.Ok(true, "Líder asignado.");
     }

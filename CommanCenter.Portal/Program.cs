@@ -55,6 +55,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.Name     = cookieName;
         options.LoginPath       = loginPath;
         options.AccessDeniedPath = "/Auth/AccessDenied";
+        options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
         options.SlidingExpiration = true;
         options.ExpireTimeSpan  = TimeSpan.FromMinutes(expireMinutes);
     });

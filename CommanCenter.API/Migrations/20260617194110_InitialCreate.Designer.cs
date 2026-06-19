@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CommanCenter.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260612181624_AddAuditTrailFields")]
-    partial class AddAuditTrailFields
+    [Migration("20260617194110_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -300,10 +300,6 @@ namespace CommanCenter.API.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("NivelSeniority")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -315,14 +311,6 @@ namespace CommanCenter.API.Migrations
                     b.Property<string>("Rol")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Tecnologia")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Telefono")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -344,7 +332,8 @@ namespace CommanCenter.API.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("AdjuntoUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Asunto")
                         .IsRequired()
@@ -367,7 +356,8 @@ namespace CommanCenter.API.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ErrorMensaje")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
@@ -389,11 +379,13 @@ namespace CommanCenter.API.Migrations
 
                     b.Property<string>("Modulo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Tipo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 

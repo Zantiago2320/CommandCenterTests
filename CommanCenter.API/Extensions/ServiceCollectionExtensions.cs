@@ -45,7 +45,9 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration config)
     {
         var jwtSettings = config.GetSection("JwtSettings");
-        var key = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!);
+        var secretKey = jwtSettings["SecretKey"]
+            ?? throw new InvalidOperationException("JwtSettings:SecretKey no está configurado. Revise appsettings o variables de entorno.");
+        var key = Encoding.UTF8.GetBytes(secretKey);
 
         services.AddAuthentication(options =>
         {

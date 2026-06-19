@@ -38,7 +38,6 @@ if (builder.Configuration.GetValue<bool>("ApplicationInsights:Enabled"))
         options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
     });
 }
-
 // ── Build ──────────────────────────────────────────────────────────────────
 var app = builder.Build();
 
@@ -51,6 +50,7 @@ try
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
     await db.Database.MigrateAsync();
+
     await SeedAsync(roleManager, userManager);
     await SeedCelulasAsync(db);
 }
@@ -131,6 +131,7 @@ static async Task SeedAsync(RoleManager<IdentityRole> roleManager, UserManager<I
 }
 
 // Crea las células base del equipo si aún no existen (solo faltan asignar consultores).
+
 static async Task SeedCelulasAsync(AppDbContext db)
 {
     string[] celulas =

@@ -1,4 +1,4 @@
-﻿using CommanCenter.API.Application.DTOs.Common;
+using CommanCenter.API.Application.DTOs.Common;
 using CommanCenter.API.Application.DTOs.Consultores;
 
 namespace CommanCenter.API.Application.Interfaces;

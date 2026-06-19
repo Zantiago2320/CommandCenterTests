@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CommanCenter.API.Migrations
 {
     /// <inheritdoc />
-    public partial class ResolveModelChanges : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -60,10 +60,13 @@ namespace CommanCenter.API.Migrations
                     Accion = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Entidad = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     EntidadId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CampoModificado = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ValorAnterior = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ValorNuevo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UsuarioId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UsuarioEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UsuarioRol = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Razon = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IpAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserAgent = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Exitoso = table.Column<bool>(type: "bit", nullable: false),
@@ -110,12 +113,9 @@ namespace CommanCenter.API.Migrations
                     Nombre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Apellido = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Telefono = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Celular = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Cargo = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     Rol = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Tecnologia = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    NivelSeniority = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Capacidad = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Empresa = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     Direccion = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
@@ -147,8 +147,8 @@ namespace CommanCenter.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Modulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Modulo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Tipo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Destinatario = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Asunto = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     Cuerpo = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -156,8 +156,8 @@ namespace CommanCenter.API.Migrations
                     FechaEnvio = table.Column<DateTime>(type: "datetime2", nullable: true),
                     FechaProgramada = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Intentos = table.Column<int>(type: "int", nullable: false),
-                    ErrorMensaje = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AdjuntoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ErrorMensaje = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    AdjuntoUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FechaModificacion = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreadoPor = table.Column<string>(type: "nvarchar(max)", nullable: true),

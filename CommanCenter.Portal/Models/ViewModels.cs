@@ -32,12 +32,9 @@ public class ConsultorViewModel
     public string Apellido { get; set; } = string.Empty;
     public string NombreCompleto => $"{Nombre} {Apellido}";
     public string Email { get; set; } = string.Empty;
-    public string? Telefono { get; set; }
     public string? Celular { get; set; }
     public string? Cargo { get; set; }
     public string? Rol { get; set; }
-    public string? Tecnologia { get; set; }
-    public string? NivelSeniority { get; set; }
     public string? Capacidad { get; set; }
     public string? Empresa { get; set; }
     public string? Direccion { get; set; }
@@ -74,8 +71,6 @@ public class CrearConsultorViewModel
     [EmailAddress(ErrorMessage = "El correo no es válido.")]
     public string Email { get; set; } = string.Empty;
 
-    public string? Telefono { get; set; }
-
     [Required(ErrorMessage = "El celular es obligatorio.")]
     public string Celular { get; set; } = string.Empty;
 
@@ -83,8 +78,6 @@ public class CrearConsultorViewModel
     public string Cargo { get; set; } = string.Empty;
 
     public string? Rol { get; set; }
-    public string? Tecnologia { get; set; }
-    public string? NivelSeniority { get; set; }
     public string? Capacidad { get; set; }
 
     [Required(ErrorMessage = "La empresa es obligatoria.")]
@@ -127,8 +120,6 @@ public class EditarConsultorViewModel
     [EmailAddress(ErrorMessage = "El correo no es válido.")]
     public string Email { get; set; } = string.Empty;
 
-    public string? Telefono { get; set; }
-
     [Required(ErrorMessage = "El celular es obligatorio.")]
     public string Celular { get; set; } = string.Empty;
 
@@ -136,8 +127,6 @@ public class EditarConsultorViewModel
     public string Cargo { get; set; } = string.Empty;
 
     public string? Rol { get; set; }
-    public string? Tecnologia { get; set; }
-    public string? NivelSeniority { get; set; }
     public string? Capacidad { get; set; }
 
     [Required(ErrorMessage = "La empresa es obligatoria.")]

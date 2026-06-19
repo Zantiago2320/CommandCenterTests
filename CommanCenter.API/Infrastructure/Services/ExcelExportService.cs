@@ -19,8 +19,8 @@ public class ExcelExportService : IExcelExportService
 
         string[] encabezados =
         {
-            "Cédula", "Nombre", "Apellido", "Email", "Teléfono", "Celular",
-            "Cargo", "Rol", "Tecnología", "Seniority", "Capacidad", "Empresa",
+            "Cédula", "Nombre", "Apellido", "Email", "Celular",
+            "Cargo", "Rol", "Capacidad", "Empresa",
             "Dirección", "Barrio", "Contacto emergencia", "Tel. emergencia",
             "Estado", "Fecha ingreso", "Fecha nacimiento", "Células", "Habilitado"
         };
@@ -35,12 +35,9 @@ public class ExcelExportService : IExcelExportService
             ws.Cell(fila, col++).Value = c.Nombre;
             ws.Cell(fila, col++).Value = c.Apellido;
             ws.Cell(fila, col++).Value = c.Email;
-            ws.Cell(fila, col++).Value = c.Telefono ?? "—";
             ws.Cell(fila, col++).Value = c.Celular ?? "—";
             ws.Cell(fila, col++).Value = c.Cargo ?? "—";
             ws.Cell(fila, col++).Value = c.Rol ?? "—";
-            ws.Cell(fila, col++).Value = c.Tecnologia ?? "—";
-            ws.Cell(fila, col++).Value = c.NivelSeniority ?? "—";
             ws.Cell(fila, col++).Value = c.Capacidad ?? "—";
             ws.Cell(fila, col++).Value = c.Empresa ?? "—";
             ws.Cell(fila, col++).Value = c.Direccion ?? "—";

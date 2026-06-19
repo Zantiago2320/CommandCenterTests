@@ -10,12 +10,9 @@ public class ConsultorDto
     public string Apellido { get; set; } = string.Empty;
     public string NombreCompleto => $"{Nombre} {Apellido}";
     public string Email { get; set; } = string.Empty;
-    public string? Telefono { get; set; }
     public string? Celular { get; set; }
     public string? Cargo { get; set; }
     public string? Rol { get; set; }
-    public string? Tecnologia { get; set; }
-    public string? NivelSeniority { get; set; }
     public string? Capacidad { get; set; }
     public string? Empresa { get; set; }
     public string? Direccion { get; set; }
@@ -53,9 +50,6 @@ public class CrearConsultorDto
     [EmailAddress(ErrorMessage = "El email no tiene un formato válido.")]
     public string Email { get; set; } = string.Empty;
 
-    [MaxLength(20)]
-    public string? Telefono { get; set; }
-
     [Required(ErrorMessage = "El celular es obligatorio.")]
     [MaxLength(20)]
     public string Celular { get; set; } = string.Empty;
@@ -66,12 +60,6 @@ public class CrearConsultorDto
 
     [MaxLength(100)]
     public string? Rol { get; set; }
-
-    [MaxLength(100)]
-    public string? Tecnologia { get; set; }
-
-    [MaxLength(50)]
-    public string? NivelSeniority { get; set; }
 
     [MaxLength(50)]
     public string? Capacidad { get; set; }

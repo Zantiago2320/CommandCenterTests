@@ -61,25 +61,32 @@ public class AuditoriaRepository : Repository<AuditoriaLog>, IAuditoriaRepositor
         ip ??= http?.Connection?.RemoteIpAddress?.ToString();
         var userAgent = http?.Request?.Headers["User-Agent"].ToString();
 
-        var log = new AuditoriaLog
+        try
         {
-            Modulo = modulo,
-            Accion = accion,
-            Entidad = entidad,
-            EntidadId = entidadId,
-            ValorAnterior = valorAnterior,
-            ValorNuevo = valorNuevo,
-            UsuarioId = usuarioId,
-            UsuarioEmail = usuarioEmail,
-            IpAddress = string.IsNullOrWhiteSpace(ip) ? "desconocida" : ip,
-            UserAgent = string.IsNullOrWhiteSpace(userAgent) ? "desconocido" : userAgent,
-            Exitoso = exitoso,
-            MensajeError = error,
-            FechaCreacion = DateTime.UtcNow
-        };
+            var log = new AuditoriaLog
+            {
+                Modulo = modulo,
+                Accion = accion,
+                Entidad = entidad,
+                EntidadId = entidadId,
+                ValorAnterior = valorAnterior,
+                ValorNuevo = valorNuevo,
+                UsuarioId = usuarioId,
+                UsuarioEmail = usuarioEmail,
+                IpAddress = string.IsNullOrWhiteSpace(ip) ? "desconocida" : ip,
+                UserAgent = string.IsNullOrWhiteSpace(userAgent) ? "desconocido" : userAgent,
+                Exitoso = exitoso,
+                MensajeError = error,
+                FechaCreacion = DateTime.UtcNow
+            };
 
-        await _context.AuditoriaLogs.AddAsync(log);
-        await _context.SaveChangesAsync();
+            await _context.AuditoriaLogs.AddAsync(log);
+            await _context.SaveChangesAsync();
+        }
+        catch
+        {
+            // La auditoría no debe interrumpir la operación principal
+        }
     }
 
     public async Task RegistrarCambioAsync(
@@ -112,26 +119,33 @@ public class AuditoriaRepository : Repository<AuditoriaLog>, IAuditoriaRepositor
         var ip = http?.Connection?.RemoteIpAddress?.ToString();
         var userAgent = http?.Request?.Headers["User-Agent"].ToString();
 
-        var log = new AuditoriaLog
+        try
         {
-            Modulo = modulo,
-            Accion = accion,
-            Entidad = entidad,
-            EntidadId = entidadId,
-            UsuarioId = usuarioId,
-            UsuarioEmail = usuarioEmail,
-            UsuarioRol = usuarioRol,
-            CampoModificado = campoModificado,
-            ValorAnterior = valorAnterior,
-            ValorNuevo = valorNuevo,
-            Razon = razon,
-            IpAddress = string.IsNullOrWhiteSpace(ip) ? "desconocida" : ip,
-            UserAgent = string.IsNullOrWhiteSpace(userAgent) ? "desconocido" : userAgent,
-            Exitoso = true,
-            FechaCreacion = DateTime.UtcNow
-        };
+            var log = new AuditoriaLog
+            {
+                Modulo = modulo,
+                Accion = accion,
+                Entidad = entidad,
+                EntidadId = entidadId,
+                UsuarioId = usuarioId,
+                UsuarioEmail = usuarioEmail,
+                UsuarioRol = usuarioRol,
+                CampoModificado = campoModificado,
+                ValorAnterior = valorAnterior,
+                ValorNuevo = valorNuevo,
+                Razon = razon,
+                IpAddress = string.IsNullOrWhiteSpace(ip) ? "desconocida" : ip,
+                UserAgent = string.IsNullOrWhiteSpace(userAgent) ? "desconocido" : userAgent,
+                Exitoso = true,
+                FechaCreacion = DateTime.UtcNow
+            };
 
-        await _context.AuditoriaLogs.AddAsync(log);
-        await _context.SaveChangesAsync();
+            await _context.AuditoriaLogs.AddAsync(log);
+            await _context.SaveChangesAsync();
+        }
+        catch
+        {
+            // La auditoría no debe interrumpir la operación principal
+        }
     }
 }

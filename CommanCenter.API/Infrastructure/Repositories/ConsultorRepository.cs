@@ -56,4 +56,10 @@ public class ConsultorRepository : Repository<Consultor>, IConsultorRepository
                      && c.Habilitado && c.Activo)
             .OrderBy(c => c.FechaNacimiento!.Value.Day)
             .ToListAsync();
+
+    public async Task<Consultor?> GetByIdWithCelulasAsync(int id) =>
+        await _context.Consultores
+            .Include(c => c.Celulas).ThenInclude(cm => cm.Celula)
+            .Include(c => c.CelulasLideradas)
+            .FirstOrDefaultAsync(c => c.Id == id);
 }
